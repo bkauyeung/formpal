@@ -187,3 +187,19 @@ select
 from histogram_table
 group by floor_difference, ceiling_difference
 order by floor_difference;
+
+                         
+                         5.  For users who added a card, what was their mean payment amount before adding the card?
+I couldnt get this information because the mean payment is not itemized for each link, so I just took the total
+number of payments taken before a card was added.
+
+select
+  users.id,
+  users.google_email,
+  count(paid_at)
+from users
+  inner join links on users.id=links.user_id
+  inner join payments on links.id=payments.link_id
+where card_added_at is not null and
+paid_at < card_added_at
+group by users.id, users.google_email;
